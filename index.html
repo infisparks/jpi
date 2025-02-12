@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Navbar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom styling for the Instagram logo */
+        .instagram-logo {
+            font-size: 2rem;
+            color: #636363;
+        }
+
+        /* Fix navbar image */
+        .navbar-logo {
+            height: 60px;
+            object-fit: contain;
+        }
+
+        /* Custom border style */
+        .navbar-border {
+            border-top-width: 1px; /* Thinner border */
+            border-color: #d1d5db; /* Light gray border */
+        }
+
+        /* Top navbar styling */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: white;
+            z-index: 50;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Bottom navbar styling */
+        .bottom-navbar {
+            width: 100%;
+            background-color: black;
+            box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 65px; /* Pushes the bottom navbar below the top navbar */
+        }
+
+        /* Menu links styling */
+        .menu-link {
+            padding: 10px 15px;
+            color: white;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .menu-link:hover {
+            border-bottom: 2px solid white;
+        }
+
+        /* Space between content and bottom navbar */
+        .content {
+            padding-top: 80px; /* Adds space for the top navbar */
+        }
+
+        /* Sidenav styles */
+        .sidenav {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+            z-index: 100;
+        }
+
+        .sidenav a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 20px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+            background-color: #575757;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            color: white;
+        }
+
+        .sidenav.open {
+            left: 0;
+        }
+
+        /* Smooth Transition for Sidenav */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+
+        /* Overlay for outside click to close */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 99;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Hamburger menu for small screens */
+        .hamburger-btn {
+            display: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            .hamburger-btn {
+                display: block;
+                font-size: 30px;
+                color: #333;
+                cursor: pointer;
+            }
+
+            .bottom-navbar {
+                display: none;
+            }
+
+            .sidenav {
+                left: -250px;
+            }
+
+            .sidenav.open {
+                left: 0;
+            }
+        }
+
+        /* Styling for image carousel */
+        .carousel {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .carousel-images {
+            display: flex;
+            transition: transform 1s ease-in-out;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: auto;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="top-navbar navbar-border">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="relative flex items-center justify-between h-16">
+                <!-- Instagram Logo (Left Corner) -->
+                <a href="https://www.instagram.com/jerseysparadise.in/?hl=en" class="absolute left-4">
+                    <i class="fab fa-instagram instagram-logo"></i>
+                </a>
+
+                <!-- Logo in the center -->
+                <div class="flex items-center justify-center flex-1">
+                    <a href="#">
+                        <img src="1.jpg" alt="Logo" class="navbar-logo">
+                    </a>
+                </div>
+
+                <!-- Right Corner Icons -->
+                <div class="flex space-x-6 mr-4">
+                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+                        <i class="fas fa-heart"></i> <!-- Wishlist icon -->
+                    </a>
+                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+                        <i class="fas fa-shopping-cart"></i> <!-- Cart icon -->
+                    </a>
+                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+                        <i class="fas fa-search"></i> <!-- Search icon -->
+                    </a>
+                </div>
+
+                <!-- Hamburger Menu Button for Mobile -->
+                <span class="hamburger-btn" id="hamburger-icon">
+                    <i class="fas fa-bars"></i>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Bottom Navbar (For Large Screens) -->
+    <nav class="bottom-navbar">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="flex justify-between">
+                <a href="#" class="menu-link">HOME</a>
+                <a href="#" class="menu-link">SHOP</a>
+                <a href="#" class="menu-link">24 25 SEASON</a>
+                <a href="#" class="menu-link">EURO JERSEYS</a>
+                <a href="#" class="menu-link">RETRO JERSEYS</a>
+                <a href="#" class="menu-link">SLEEVELESS JERSEYS</a>
+                <a href="#" class="menu-link">CRICKET JERSEY</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidenav (For Small Screens) -->
+    <div id="sidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
+        <a href="#">HOME</a>
+        <a href="#">SHOP</a>
+        <a href="#">24 25 SEASON</a>
+        <a href="#">EURO JERSEYS</a>
+        <a href="#">RETRO JERSEYS</a>
+        <a href="#">SLEEVELESS JERSEYS</a>
+        <a href="#">CRICKET JERSEY</a>
+    </div>
+
+    <!-- Overlay to close sidenav when clicked outside -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Image Carousel -->
+    <div class="carousel">
+        <div class="carousel-images">
+            <img src="8.png" alt="Image 1">
+            <img src="9.png" alt="Image 2">
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidenav on hamburger menu click
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const sidenav = document.getElementById('sidenav');
+        const closebtn = document.getElementById('closebtn');
+        const overlay = document.getElementById('overlay');
+
+        hamburgerIcon.addEventListener('click', () => {
+            sidenav.classList.add('open');
+            overlay.classList.add('show');
+        });
+
+        closebtn.addEventListener('click', () => {
+            sidenav.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+
+        // Close sidenav if overlay is clicked
+        overlay.addEventListener('click', () => {
+            sidenav.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+
+        // Image Carousel logic (auto change every 2 seconds)
+        let currentIndex = 0;
+        const images = document.querySelectorAll('.carousel img');
+        const totalImages = images.length;
+
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % totalImages;
+            document.querySelector('.carousel-images').style.transform = `translateX(-${currentIndex * 100}%)`;
+        }, 2000);
+    </script>
+</body>
+
+</html>
