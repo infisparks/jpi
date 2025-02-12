@@ -22,8 +22,8 @@
 
         /* Custom border style */
         .navbar-border {
-            border-top-width: 1px; /* Thinner border */
-            border-color: #d1d5db; /* Light gray border */
+            border-top-width: 1px;
+            border-color: #d1d5db;
         }
 
         /* Top navbar styling */
@@ -41,7 +41,6 @@
             width: 100%;
             background-color: black;
             box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 65px; /* Pushes the bottom navbar below the top navbar */
         }
 
         /* Menu links styling */
@@ -59,7 +58,7 @@
 
         /* Space between content and bottom navbar */
         .content {
-            padding-top: 80px; /* Adds space for the top navbar */
+            padding-top: 80px;
         }
 
         /* Sidenav styles */
@@ -167,6 +166,7 @@
             width: 100%;
             height: auto;
             margin-top: 50px;
+            padding: 10px;
         }
     </style>
 </head>
@@ -208,9 +208,7 @@
                 </span>
             </div>
         </div>
-    </nav>
-
-    <!-- Bottom Navbar (For Large Screens) -->
+          <!-- Bottom Navbar (For Large Screens) -->
     <nav class="bottom-navbar">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex justify-between">
@@ -224,6 +222,9 @@
             </div>
         </div>
     </nav>
+    </nav>
+
+  
 
     <!-- Sidenav (For Small Screens) -->
     <div id="sidenav" class="sidenav">
@@ -247,6 +248,71 @@
             <img src="9.png" alt="Image 2">
         </div>
     </div>
+
+    <div class="text-center">
+        <h3 class="font-semibold text-xl text-gray-700 mt-10">Shop Premium Football Jerseys Online - India’s No. 1 Store</h3>
+    </div>
+    <div class="text-center">
+        <p class="text-gray-600 font-semibold m">
+            Show off your soccer spirit with high-quality jerseys for men from Fanaacs. Explore our latest collection of sporting jerseys with team-focused designs, athlete-inspired features, and comfortable fabrics—perfect for playing, supporting, and cheering on the field. Shop now with exclusive offers!
+        </p>
+    </div>
+    <div class="text-center">
+        <h1 class="font-semibold mt-10 text-3xl text-black">NEW ARRIVALS</h1>
+    </div>
+
+    <!-- Product Cards will go here -->
+    <div id="products-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
+        <!-- Products will be dynamically loaded here -->
+    </div>
+
+    <!-- Firebase Script -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCt_2hlmYjIpWsxSMpXNOwmpPzwyNnIiB8",
+            authDomain: "the-times-e4a65.firebaseapp.com",
+            databaseURL: "https://the-times-e4a65-default-rtdb.firebaseio.com",
+            projectId: "the-times-e4a65",
+            storageBucket: "the-times-e4a65.appspot.com",
+            messagingSenderId: "958497728175",
+            appId: "1:958497728175:web:60fcdfdf97564fe083165a",
+            measurementId: "G-BLT9FRR41R"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Reference to the products collection in Firebase
+        const productsRef = ref(database, 'products/');
+
+        // Get products from Firebase and display them
+        const productsList = document.getElementById('products-list');
+        onValue(productsRef, (snapshot) => {
+            productsList.innerHTML = ''; // Clear the current products
+
+            snapshot.forEach(childSnapshot => {
+                const product = childSnapshot.val();
+
+                const productCard = document.createElement('div');
+                productCard.classList.add('max-w-xs', 'mx-auto', 'bg-white', 'rounded-lg', 'overflow-hidden', 'shadow-lg');
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold">${product.name}</h3>
+                        <p class="text-gray-600 mt-2">${product.description}</p>
+                        <p class="text-xl font-semibold mt-3">₹${product.price}</p>
+                    </div>
+                `;
+                productsList.appendChild(productCard);
+            });
+        });
+    </script>
 
     <script>
         // Toggle sidenav on hamburger menu click
@@ -281,6 +347,7 @@
             document.querySelector('.carousel-images').style.transform = `translateX(-${currentIndex * 100}%)`;
         }, 2000);
     </script>
+
 </body>
 
 </html>

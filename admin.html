@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Manage Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Firebase Modular SDK -->
+    <script type="module">
+        // Firebase imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+        import { getDatabase, ref as dbRef, push, set, onValue, remove, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCt_2hlmYjIpWsxSMpXNOwmpPzwyNnIiB8",
+            authDomain: "the-times-e4a65.firebaseapp.com",
+            databaseURL: "https://the-times-e4a65-default-rtdb.firebaseio.com",
+            projectId: "the-times-e4a65",
+            storageBucket: "the-times-e4a65.appspot.com",
+            messagingSenderId: "958497728175",
+            appId: "1:958497728175:web:60fcdfdf97564fe083165a",
+            measurementId: "G-BLT9FRR41R"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
+        const database = getDatabase(app);
+    
+        // Reference to the products collection in Firebase
+        const productsRef = dbRef(database, 'products/');
+    
+        // Add new product
+        document.getElementById('product-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+    
+            const name = document.getElementById('product-name').value;
+            const description = document.getElementById('product-description').value;
+            const price = document.getElementById('product-price').value;
+            const fileInput = document.getElementById('product-image');
+            const file = fileInput.files[0];
+    
+            if (file) {
+                const storageRef = ref(storage, 'products/' + file.name);
+    
+                // Upload image to Firebase Storage
+                await uploadBytes(storageRef, file);
+                const imageUrl = await getDownloadURL(storageRef);
+    
+                // Push new product to Firebase Realtime Database
+                const newProductRef = push(productsRef);
+                set(newProductRef, {
+                    name: name,
+                    image: imageUrl,
+                    description: description,
+                    price: price
+                }).then(() => {
+                    alert('Product added successfully!');
+                    document.getElementById('product-form').reset();
+                }).catch((error) => {
+                    console.error("Error adding product: ", error);
+                });
+            } else {
+                alert('Please select an image.');
+            }
+        });
+    
+        // Fetch and display products
+        const productsList = document.getElementById('products-list');
+        onValue(productsRef, (snapshot) => {
+            productsList.innerHTML = ''; // Clear existing products
+            snapshot.forEach(childSnapshot => {
+                const product = childSnapshot.val();
+                const productId = childSnapshot.key;
+    
+                const productCard = document.createElement('div');
+                productCard.classList.add('max-w-xs', 'mx-auto', 'bg-white', 'rounded-lg', 'overflow-hidden', 'shadow-lg');
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold">${product.name}</h3>
+                        <p class="text-gray-600 mt-2">${product.description}</p>
+                        <p class="text-xl font-semibold mt-3">₹${product.price}</p>
+                        <button class="bg-yellow-500 text-white py-1 px-4 rounded mt-4" onclick="editProduct('${productId}')">Edit</button>
+                        <button class="bg-red-600 text-white py-1 px-4 rounded mt-4 ml-2" onclick="deleteProduct('${productId}', '${product.image}')">Delete</button>
+                    </div>
+                `;
+                productsList.appendChild(productCard);
+            });
+        });
+    
+        // Edit Product
+        window.editProduct = async function(productId) {
+            const productRef = dbRef(database, 'products/' + productId);
+            const snapshot = await get(productRef); // Use get() instead of once()
+            if (snapshot.exists()) {
+                const product = snapshot.val();
+                
+                // Populate form fields with product data
+                document.getElementById('edit-product-name').value = product.name;
+                document.getElementById('edit-product-description').value = product.description;
+                document.getElementById('edit-product-price').value = product.price;
+    
+                // Add hidden input to track the product ID
+                const productIdInput = document.createElement('input');
+                productIdInput.type = 'hidden';
+                productIdInput.value = productId;
+                productIdInput.id = 'edit-product-id';
+                document.getElementById('edit-product-form').appendChild(productIdInput);
+    
+                // Open the modal for editing
+                document.getElementById('product-modal').classList.remove('hidden');
+            } else {
+                console.error('Product not found!');
+            }
+        };
+    
+        // Close the modal for editing
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('product-modal').classList.add('hidden');
+        });
+    
+      // Store the product data to use in the save function
+let currentProductData = {};
+
+// Edit Product
+window.editProduct = async function(productId) {
+    const productRef = dbRef(database, 'products/' + productId);
+    const snapshot = await get(productRef); // Use get() instead of once()
+    if (snapshot.exists()) {
+        const product = snapshot.val();
+        
+        // Store the product data for later use in the save function
+        currentProductData = product;
+
+        // Populate form fields with product data
+        document.getElementById('edit-product-name').value = product.name;
+        document.getElementById('edit-product-description').value = product.description;
+        document.getElementById('edit-product-price').value = product.price;
+
+        // Add hidden input to track the product ID
+        const productIdInput = document.createElement('input');
+        productIdInput.type = 'hidden';
+        productIdInput.value = productId;
+        productIdInput.id = 'edit-product-id';
+        document.getElementById('edit-product-form').appendChild(productIdInput);
+
+        // Open the modal for editing
+        document.getElementById('product-modal').classList.remove('hidden');
+    } else {
+        console.error('Product not found!');
+    }
+};
+
+document.getElementById('save-edited-product').addEventListener('click', async function() {
+    const productId = document.getElementById('edit-product-id').value;
+    const name = document.getElementById('edit-product-name').value;
+    const description = document.getElementById('edit-product-description').value;
+    const price = document.getElementById('edit-product-price').value;
+    const fileInput = document.getElementById('edit-product-image');
+    const file = fileInput.files[0];
+
+    let imageUrl = currentProductData.image;
+
+    if (file) {
+        const storageRef = ref(storage, 'products/' + file.name);
+
+        await uploadBytes(storageRef, file);
+        imageUrl = await getDownloadURL(storageRef);
+    }
+
+    const productRef = dbRef(database, 'products/' + productId);
+    set(productRef, {
+        name: name,
+        image: imageUrl,
+        description: description,
+        price: price
+    }).then(() => {
+        alert('Product updated successfully!');
+        document.getElementById('product-modal').classList.add('hidden');
+    }).catch((error) => {
+        console.error("Error updating product: ", error);
+    });
+});
+
+        // Delete Product
+        window.deleteProduct = function(productId, imageUrl) {
+            const productRef = dbRef(database, 'products/' + productId);
+            const imageRef = ref(storage, imageUrl);
+    
+            remove(productRef).then(() => {
+                alert('Product deleted successfully!');
+                deleteObject(imageRef).catch((error) => {
+                    console.error("Error deleting image: ", error);
+                });
+            }).catch((error) => {
+                console.error("Error deleting product: ", error);
+            });
+        };
+    </script>
+    
+</head>
+
+<body>
+
+    <div class="container mx-auto p-8">
+        <div class="text-center">
+            <h1 class="text-3xl font-semibold">Admin Panel</h1>
+            <p class="text-xl text-gray-600 mt-4">Manage Products</p>
+        </div>
+
+        <!-- Product Form Section -->
+        <div class="form-container mt-8 p-6 bg-white shadow-md rounded-lg">
+            <form id="product-form" class="space-y-4">
+                <input type="text" id="product-name" class="w-full p-3 border rounded" placeholder="Product Name" required>
+                <textarea id="product-description" class="w-full p-3 border rounded" placeholder="Product Description" required></textarea>
+                <input type="number" id="product-price" class="w-full p-3 border rounded" placeholder="Product Price" required>
+                <input type="file" id="product-image" class="w-full p-3 border rounded" required>
+                <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded">Add Product</button>
+            </form>
+        </div>
+
+        <!-- Product List Section -->
+        <div id="products-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+            <!-- Products will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div id="product-modal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg w-11/12 sm:w-1/2 md:w-1/3">
+            <h2 class="text-xl font-semibold mb-4">Edit Product</h2>
+            <form id="edit-product-form" class="space-y-4">
+                <input type="text" id="edit-product-name" class="w-full p-3 border rounded" placeholder="Product Name" required>
+                <textarea id="edit-product-description" class="w-full p-3 border rounded" placeholder="Product Description" required></textarea>
+                <input type="number" id="edit-product-price" class="w-full p-3 border rounded" placeholder="Product Price" required>
+                <input type="file" id="edit-product-image" class="w-full p-3 border rounded">
+                <button type="button" id="save-edited-product" class="w-full bg-blue-600 text-white p-3 rounded">Save Changes</button>
+                <button type="button" id="close-modal" class="w-full bg-gray-600 text-white p-3 rounded">Close</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
