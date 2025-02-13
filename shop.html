@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Jerseys Paradise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Add custom styles as needed */
+        .instagram-logo {
+            font-size: 2rem;
+            color: #636363;
+        }
+
+        .navbar-logo {
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .navbar-border {
+            border-top-width: 1px;
+            border-color: #d1d5db;
+        }
+
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: white;
+            z-index: 50;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .bottom-navbar {
+            width: 100%;
+            background-color: black;
+            box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-link {
+            padding: 10px 15px;
+            color: white;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .menu-link:hover {
+            border-bottom: 2px solid white;
+        }
+
+        .content {
+            padding-top: 80px;
+        }
+
+        .sidenav {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+            z-index: 100;
+        }
+
+        .sidenav a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 20px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+            background-color: #575757;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            color: white;
+        }
+
+        .sidenav.open {
+            left: 0;
+        }
+
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 99;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        .hamburger-btn {
+            display: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            .hamburger-btn {
+                display: block;
+                font-size: 30px;
+                color: #333;
+                cursor: pointer;
+            }
+
+            .bottom-navbar {
+                display: none;
+            }
+
+            .sidenav {
+                left: -250px;
+            }
+
+            .sidenav.open {
+                left: 0;
+            }
+        }
+
+        .buy-now-btn {
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            padding: 5px;
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 10px;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-color: #000;
+        }
+
+        .buy-now-btn:hover {
+            background-color: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        @media screen and (max-width: 768px) {
+            .buy-now-btn {
+                font-size: 1rem;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="top-navbar navbar-border">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="relative flex items-center justify-between h-16">
+                <a href="https://www.instagram.com/jerseysparadise.in/?hl=en" class="absolute left-4">
+                    <i class="fab fa-instagram instagram-logo"></i>
+                </a>
+                <div class="flex items-center justify-center flex-1">
+                    <a href="#">
+                        <img src="1.jpg" alt="Logo" class="navbar-logo">
+                    </a>
+                </div>
+                <div class="flex space-x-6 mr-4">
+                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+                        <i class="fas fa-heart"></i>
+                    </a>
+                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+                        <i class="fas fa-search"></i>
+                    </a>
+                </div>
+                <span class="hamburger-btn" id="hamburger-icon">
+                    <i class="fas fa-bars"></i>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Bottom Navbar (For Large Screens) -->
+    <nav class="bottom-navbar">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="flex justify-between">
+                <a href="#" class="menu-link">HOME</a>
+                <a href="#" class="menu-link">SHOP</a>
+                <a href="#" class="menu-link">24 25 SEASON</a>
+                <a href="#" class="menu-link">EURO JERSEYS</a>
+                <a href="#" class="menu-link">RETRO JERSEYS</a>
+                <a href="#" class="menu-link">SLEEVELESS JERSEYS</a>
+                <a href="#" class="menu-link">CRICKET JERSEY</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidenav (For Small Screens) -->
+    <div id="sidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
+        <a href="#">HOME</a>
+        <a href="#">SHOP</a>
+        <a href="#">24 25 SEASON</a>
+        <a href="#">EURO JERSEYS</a>
+        <a href="#">RETRO JERSEYS</a>
+        <a href="#">SLEEVELESS JERSEYS</a>
+        <a href="#">CRICKET JERSEY</a>
+    </div>
+
+    <!-- Overlay to close sidenav when clicked outside -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Shop Page Content -->
+    <div class="content">
+        <div class="text-center">
+            <h3 class="font-semibold text-xl text-gray-900 mt-10">Shop Premium Football Jerseys Online - India’s No. 1 Store</h3>
+        </div>
+        <div class="text-center">
+            <p class="text-gray-600 font-semibold mt-10">
+                Show off your soccer spirit with high-quality jerseys for men from Fanaacs. Explore our latest collection of sporting jerseys with team-focused designs, athlete-inspired features, and comfortable fabrics—perfect for playing, supporting, and cheering on the field. Shop now with exclusive offers!
+            </p>
+        </div>
+        <div class="text-center">
+            <h1 class="font-semibold mt-10 text-3xl text-black">NEW ARRIVALS</h1>
+        </div>
+
+        <!-- Product Cards Section (With Buy Now Button for Each Card) -->
+        <div id="products-list" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10 mb-10 ml-2 mr-2">
+            <!-- Products will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-black text-white py-12 border-t-4 border-r-4 border-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">INFORMATION</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-gray-400">About Us</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Refund and Returns Policy</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-gray-400">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">CUSTOMER SERVICE</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-gray-400">Track Your Order</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Subscribe to Our Newsletter</h3>
+                    <form id="newsletter-form" class="flex flex-col">
+                        <input type="email" id="email-input" class="p-3 mb-4 border border-white bg-transparent text-white placeholder-white rounded" placeholder="Enter your email here" required>
+                        <button type="submit" class="bg-white text-black p-3 rounded hover:bg-gray-200">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="mt-12 text-center border-t-2 border-white pt-4">
+                <p>&copy; Fanaacs 2024 – All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase Script -->
+    <script type="module">
+        // Firebase and other JS logic go here...
+    </script>
+
+</body>
+
+</html>

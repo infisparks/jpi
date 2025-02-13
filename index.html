@@ -168,6 +168,37 @@
             margin-top: 50px;
             padding: 10px;
         }
+        /* Styling for the Buy Now Button */
+.buy-now-btn {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    padding: 5px;
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-color: #000;
+}
+
+/* Hover effect for the button */
+.buy-now-btn:hover {
+    background-color: #fff;
+    color: #000;
+    transform: scale(1.05);
+}
+
+/* Responsive styling */
+@media screen and (max-width: 768px) {
+    .buy-now-btn {
+        font-size: 1rem;
+        
+    }
+}
+
     </style>
 </head>
 
@@ -213,7 +244,7 @@
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex justify-between">
                 <a href="#" class="menu-link">HOME</a>
-                <a href="#" class="menu-link">SHOP</a>
+                <a href="shop.html" class="menu-link">SHOP</a>
                 <a href="#" class="menu-link">24 25 SEASON</a>
                 <a href="#" class="menu-link">EURO JERSEYS</a>
                 <a href="#" class="menu-link">RETRO JERSEYS</a>
@@ -230,7 +261,7 @@
     <div id="sidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
         <a href="#">HOME</a>
-        <a href="#">SHOP</a>
+        <a href="shop.html">SHOP</a>
         <a href="#">24 25 SEASON</a>
         <a href="#">EURO JERSEYS</a>
         <a href="#">RETRO JERSEYS</a>
@@ -261,11 +292,11 @@
         <h1 class="font-semibold mt-10 text-3xl text-black">NEW ARRIVALS</h1>
     </div>
 
-    <!-- Product Cards will go here -->
-    <div id="products-list" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10 mb-10 ml-2 mr-2 ">
-        <!-- Products will be dynamically loaded here -->
-    </div>
-   
+  <!-- Product Cards Section (With Buy Now Button for Each Card) -->
+<div id="products-list" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10 mb-10 ml-2 mr-2">
+    <!-- Products will be dynamically loaded here -->
+</div>
+
       <!-- Footer Section -->
       <footer class="bg-black text-white py-12 border-t-4 border-r-4 border-white">
         <div class="container mx-auto px-6">
@@ -305,102 +336,152 @@
 
     <!-- Firebase Script -->
     <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+// Import necessary Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCt_2hlmYjIpWsxSMpXNOwmpPzwyNnIiB8",
-            authDomain: "the-times-e4a65.firebaseapp.com",
-            databaseURL: "https://the-times-e4a65-default-rtdb.firebaseio.com",
-            projectId: "the-times-e4a65",
-            storageBucket: "the-times-e4a65.appspot.com",
-            messagingSenderId: "958497728175",
-            appId: "1:958497728175:web:60fcdfdf97564fe083165a",
-            measurementId: "G-BLT9FRR41R"
-        };
+// Firebase configuration object
+const firebaseConfig = {
+    apiKey: "AIzaSyCt_2hlmYjIpWsxSMpXNOwmpPzwyNnIiB8",
+    authDomain: "the-times-e4a65.firebaseapp.com",
+    databaseURL: "https://the-times-e4a65-default-rtdb.firebaseio.com",
+    projectId: "the-times-e4a65",
+    storageBucket: "the-times-e4a65.appspot.com",
+    messagingSenderId: "958497728175",
+    appId: "1:958497728175:web:60fcdfdf97564fe083165a",
+    measurementId: "G-BLT9FRR41R"
+};
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
-        // Reference to the products collection in Firebase
-        const productsRef = ref(database, 'products/');
+// Reference to the products collection in Firebase
+const productsRef = ref(database, 'products/');
 
-        // Get products from Firebase and display them
-        const productsList = document.getElementById('products-list');
-        onValue(productsRef, (snapshot) => {
-            productsList.innerHTML = ''; // Clear the current products
+// DOM elements
+const productsList = document.getElementById('products-list');
+const form = document.getElementById('newsletter-form');
+const emailInput = document.getElementById('email-input');
 
-            snapshot.forEach(childSnapshot => {
-                const product = childSnapshot.val();
+// Function to create product cards with "Buy Now" button
+onValue(productsRef, (snapshot) => {
+    productsList.innerHTML = ''; // Clear existing products
 
-                const productCard = document.createElement('div');
-                productCard.classList.add('max-w-xs', 'mx-auto', 'bg-white', 'rounded-lg', 'overflow-hidden', 'shadow-lg');
-                productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">${product.name}</h3>
-                        <p class="text-gray-600 mt-2">${product.description}</p>
-                        <p class="text-xl font-semibold mt-3">₹${product.price}</p>
-                    </div>
-                `;
-                productsList.appendChild(productCard);
+    // Loop through each product in Firebase
+    snapshot.forEach(childSnapshot => {
+        const product = childSnapshot.val();
+        const productId = childSnapshot.key;
+
+        // Create the product card HTML
+        const productCard = document.createElement('div');
+        productCard.classList.add('max-w-xs', 'mx-auto', 'bg-white', 'rounded-lg', 'overflow-hidden', 'shadow-lg');
+        productCard.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold">${product.name}</h3>
+                <p class="text-gray-600 mt-2">${product.description}</p>
+                <p class="text-xl font-semibold mt-3">₹${product.price}</p>
+
+                <!-- Rating Stars -->
+                <div class="stars mt-3">
+                    ${[1, 2, 3, 4, 5].map(star => `
+                        <i class="fa fa-star ${product.rating && product.rating >= star ? 'text-yellow-500' : 'text-gray-300'}" data-star="${star}" data-product-id="${productId}"></i>
+                    `).join('')}
+                </div>
+
+                <p class="mt-2 text-gray-500 text-sm">${product.rating ? `Rating: ${product.rating} / 5` : 'Be the first to rate this product!'}</p>
+
+                <!-- Buy Now Button for this product -->
+                <a href="https://api.whatsapp.com/send/?phone=916290563943&text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}%20for%20₹${product.price}&type=phone_number&app_absent=0" 
+   class="buy-now-btn inline-block px-6 py-2 bg-white text-black rounded-[10px] border border-black text-base sm:text-lg hover:bg-gray-800 hover:text-white transition-all mt-4 shadow-md whitespace-nowrap">
+    Buy Now
+</a>
+
+            </div>
+        `;
+
+        // Append product card to the product list
+        productsList.appendChild(productCard);
+    });
+});
+
+
+// Handle user rating click
+document.addEventListener('click', (e) => {
+    if (e.target && e.target.classList.contains('fa-star')) {
+        const star = parseInt(e.target.getAttribute('data-star'));
+        const productId = e.target.getAttribute('data-product-id');
+
+        // Reference to the specific product in Firebase
+        const productRef = ref(database, `products/${productId}`);
+
+        // Get the existing product data before updating the rating
+        onValue(productRef, (snapshot) => {
+            const product = snapshot.val(); // Retrieve the product data from Firebase
+
+            // Update the product's rating in Firebase
+            set(productRef, {
+                ...product, // Retain the existing product details
+                rating: star, // Update the rating field
+            }).then(() => {
+                alert('Thank you for your rating!');
+            }).catch((error) => {
+                alert('Error rating the product: ' + error.message);
             });
         });
-    </script>
- <!-- JavaScript for Email Validation -->
- <script>
-    const form = document.getElementById('newsletter-form');
-    const emailInput = document.getElementById('email-input');
+    }
+});
 
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        const email = emailInput.value.trim();
+// Handle email subscription form submission
+form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    const email = emailInput.value.trim();
 
-        // Simple email validation
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (emailPattern.test(email)) {
-            alert("Subscription successful!");
-            emailInput.value = ''; // Clear input field
-        } else {
-            alert("Please enter a valid email address.");
-        }
-    });
-</script>
-    <script>
-        // Toggle sidenav on hamburger menu click
-        const hamburgerIcon = document.getElementById('hamburger-icon');
-        const sidenav = document.getElementById('sidenav');
-        const closebtn = document.getElementById('closebtn');
-        const overlay = document.getElementById('overlay');
+    // Simple email validation regex
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (emailPattern.test(email)) {
+        alert("Subscription successful!");
+        emailInput.value = ''; // Clear the input field
+    } else {
+        alert("Please enter a valid email address.");
+    }
+});
 
-        hamburgerIcon.addEventListener('click', () => {
-            sidenav.classList.add('open');
-            overlay.classList.add('show');
-        });
+// Handle the hamburger menu toggle for small screens
+const hamburgerIcon = document.getElementById('hamburger-icon');
+const sidenav = document.getElementById('sidenav');
+const closebtn = document.getElementById('closebtn');
+const overlay = document.getElementById('overlay');
 
-        closebtn.addEventListener('click', () => {
-            sidenav.classList.remove('open');
-            overlay.classList.remove('show');
-        });
+// Open and close the sidenav
+hamburgerIcon.addEventListener('click', () => {
+    sidenav.classList.add('open');
+    overlay.classList.add('show');
+});
 
-        // Close sidenav if overlay is clicked
-        overlay.addEventListener('click', () => {
-            sidenav.classList.remove('open');
-            overlay.classList.remove('show');
-        });
+closebtn.addEventListener('click', () => {
+    sidenav.classList.remove('open');
+    overlay.classList.remove('show');
+});
 
-        // Image Carousel logic (auto change every 2 seconds)
-        let currentIndex = 0;
-        const images = document.querySelectorAll('.carousel img');
-        const totalImages = images.length;
+// Close sidenav if overlay is clicked
+overlay.addEventListener('click', () => {
+    sidenav.classList.remove('open');
+    overlay.classList.remove('show');
+});
 
-        setInterval(() => {
-            currentIndex = (currentIndex + 1) % totalImages;
-            document.querySelector('.carousel-images').style.transform = `translateX(-${currentIndex * 100}%)`;
-        }, 2000);
+// Image Carousel logic (auto change every 2 seconds)
+let currentIndex = 0;
+const images = document.querySelectorAll('.carousel img');
+const totalImages = images.length;
+
+// Function to update the carousel
+setInterval(() => {
+    currentIndex = (currentIndex + 1) % totalImages;
+    document.querySelector('.carousel-images').style.transform = `translateX(-${currentIndex * 100}%)`;
+}, 2000);
+
     </script>
 
 </body>
