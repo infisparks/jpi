@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footer Example</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-black text-white">
+    <!-- Footer Section -->
+    <footer class="bg-black text-white py-12 border-t-4 border-r-4 border-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Information Section -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">INFORMATION</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-gray-400">About Us</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Refund and Returns Policy</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-gray-400">FAQ</a></li>
+                    </ul>
+                </div>
+                <!-- Customer Service Section -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">CUSTOMER SERVICE</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-gray-400">Track Your Order</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Contact Us</a></li>
+                    </ul>
+                </div>
+                <!-- Newsletter Section -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Subscribe to Our Newsletter</h3>
+                    <form id="newsletter-form" class="flex flex-col">
+                        <input type="email" id="email-input" class="p-3 mb-4 border border-white bg-transparent text-white placeholder-white rounded" placeholder="Enter your email here" required>
+                        <button type="submit" class="bg-white text-black p-3 rounded hover:bg-gray-200">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="mt-12 text-center border-t-2 border-white pt-4">
+                <p>&copy; Fanaacs 2024 – All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Email Validation -->
+    <script>
+        const form = document.getElementById('newsletter-form');
+        const emailInput = document.getElementById('email-input');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const email = emailInput.value.trim();
+
+            // Simple email validation
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (emailPattern.test(email)) {
+                alert("Subscription successful!");
+                emailInput.value = ''; // Clear input field
+            } else {
+                alert("Please enter a valid email address.");
+            }
+        });
+    </script>
+</body>
+
+</html>
