@@ -1,75 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
+ <!-- Firebase SDK -->
+ <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Footer Example</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
-</head>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCt_2hlmYjIpWsxSMpXNOwmpPzwyNnIiB8",
+        authDomain: "the-times-e4a65.firebaseapp.com",
+        databaseURL: "https://the-times-e4a65-default-rtdb.firebaseio.com",
+        projectId: "the-times-e4a65",
+        storageBucket: "the-times-e4a65.appspot.com",
+        messagingSenderId: "958497728175",
+        appId: "1:958497728175:web:60fcdfdf97564fe083165a",
+        measurementId: "G-BLT9FRR41R"
+    };
 
-<body class="bg-black text-white">
-    <!-- Footer Section -->
-    <footer class="bg-black text-white py-12 border-t-4 border-r-4 border-white">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <!-- Information Section -->
-                <div>
-                    <h3 class="text-xl font-semibold mb-6">INFORMATION</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#" class="hover:text-gray-400">About Us</a></li>
-                        <li><a href="#" class="hover:text-gray-400">Refund and Returns Policy</a></li>
-                        <li><a href="#" class="hover:text-gray-400">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-gray-400">FAQ</a></li>
-                    </ul>
-                </div>
-                <!-- Customer Service Section -->
-                <div>
-                    <h3 class="text-xl font-semibold mb-6">CUSTOMER SERVICE</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#" class="hover:text-gray-400">Track Your Order</a></li>
-                        <li><a href="#" class="hover:text-gray-400">Contact Us</a></li>
-                    </ul>
-                </div>
-                <!-- Newsletter Section -->
-                <div>
-                    <h3 class="text-xl font-semibold mb-6">Subscribe to Our Newsletter</h3>
-                    <form id="newsletter-form" class="flex flex-col">
-                        <input type="email" id="email-input" class="p-3 mb-4 border border-white bg-transparent text-white placeholder-white rounded" placeholder="Enter your email here" required>
-                        <button type="submit" class="bg-white text-black p-3 rounded hover:bg-gray-200">Subscribe</button>
-                    </form>
-                </div>
-            </div>
-            <div class="mt-12 text-center border-t-2 border-white pt-4">
-                <p>&copy; Fanaacs 2024 – All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const productsRef = ref(database, 'products/');
 
-    <!-- JavaScript for Email Validation -->
-    <script>
-        const form = document.getElementById('newsletter-form');
-        const emailInput = document.getElementById('email-input');
+    let allProducts = []; // Store all products globally
 
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const email = emailInput.value.trim();
+    // Function to fetch products from Firebase and store them
+    function fetchProducts() {
+        onValue(productsRef, (snapshot) => {
+            allProducts = []; // Reset global product list
 
-            // Simple email validation
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (emailPattern.test(email)) {
-                alert("Subscription successful!");
-                emailInput.value = ''; // Clear input field
-            } else {
-                alert("Please enter a valid email address.");
-            }
+            snapshot.forEach(childSnapshot => {
+                const product = childSnapshot.val();
+                allProducts.push(product);
+            });
+
+            // Display all products initially
+            displayProducts(allProducts);
         });
-    </script>
-</body>
+    }
 
-</html>
+    // Function to display products dynamically
+    function displayProducts(products) {
+        const productList = document.getElementById('product-list');
+        productList.innerHTML = ''; // Clear previous products
+
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card', 'bg-white', 'rounded-lg', 'shadow-md', 'p-4', 'text-center');
+            productCard.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover rounded">
+                <h3 class="text-lg font-semibold mt-2">${product.name}</h3>
+                <p class="text-gray-600">${product.description}</p>
+                <p class="text-xl font-semibold mt-3">₹${product.price}</p>
+                <a href="https://api.whatsapp.com/send/?phone=916290563943&text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}%20for%20₹${product.price}&type=phone_number&app_absent=0"
+                   class="inline-block px-6 py-2 bg-blue-600 text-white rounded-md mt-3 hover:bg-blue-700 transition">
+                    Buy Now
+                </a>
+            `;
+            productList.appendChild(productCard);
+        });
+    }
+
+    // Function to search products dynamically
+    window.searchProducts = function () {
+        const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+        const filteredProducts = allProducts.filter(product =>
+            product.name.toLowerCase().includes(searchQuery)
+        );
+        displayProducts(filteredProducts);
+    };
+
+    // Fetch products on page load
+    window.onload = fetchProducts;
+</script>
