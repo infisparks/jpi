@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        /* Add your custom styles for navbar, footer, sidenav, etc. */
         /* Custom Styling for Search Bar */
         .search-bar {
             width: 100%;
@@ -67,19 +66,20 @@
                 grid-template-columns: 1fr;
             }
         }
-         /* Custom styling for the Instagram logo */
-         .instagram-logo {
+
+        /* Custom styling for the Instagram logo */
+        .instagram-logo {
             font-size: 2rem;
             color: #636363;
         }
 
-        /* Fix navbar image */
+        /* Navbar Styling */
         .navbar-logo {
             height: 60px;
             object-fit: contain;
         }
 
-        /* Custom border style */
+        /* Border style */
         .navbar-border {
             border-top-width: 1px;
             border-color: #d1d5db;
@@ -120,8 +120,8 @@
             padding-top: 80px;
         }
 
-    /* Sidenav styles */
-    .sidenav {
+        /* Sidenav styles */
+        .sidenav {
             position: fixed;
             top: 0;
             left: -250px;
@@ -147,6 +147,7 @@
             border-radius: 10px;
             margin: 10px;
         }
+
         .sidenav a:hover {
             color: #f1f1f1;
             background-color: #575757;
@@ -211,8 +212,6 @@
                 left: 0;
             }
         }
-        
-
     </style>
 </head>
 
@@ -221,31 +220,38 @@
     <nav class="top-navbar navbar-border">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="relative flex items-center justify-between h-16">
+                <!-- Instagram Logo (Left Corner) -->
                 <a href="https://www.instagram.com/jerseysparadise.in/?hl=en" class="absolute left-4">
                     <i class="fab fa-instagram instagram-logo"></i>
                 </a>
+
+                <!-- Logo in the center -->
                 <div class="flex items-center justify-center flex-1">
                     <a href="#">
                         <img src="1.jpg" alt="Logo" class="navbar-logo">
                     </a>
                 </div>
+
+                <!-- Right Corner Icons -->
                 <div class="flex space-x-6 mr-4">
                     <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
-                        <i class="fas fa-heart"></i>
+                        <i class="fas fa-heart"></i> <!-- Wishlist icon -->
                     </a>
                     <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
-                        <i class="fas fa-shopping-cart"></i>
+                        <i class="fas fa-shopping-cart"></i> <!-- Cart icon -->
                     </a>
                     <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-search"></i> <!-- Search icon -->
                     </a>
                 </div>
+
+                <!-- Hamburger Menu Button for Mobile -->
                 <span class="hamburger-btn" id="hamburger-icon">
                     <i class="fas fa-bars"></i>
                 </span>
             </div>
         </div>
-         <!-- Bottom Navbar (For Large Screens) -->
+          <!-- Bottom Navbar (For Large Screens) -->
     <nav class="bottom-navbar">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex justify-between">
@@ -259,13 +265,11 @@
             </div>
         </div>
     </nav>
-    
-     
     </nav>
 
-   
-    <img class="w-full h-auto " src="4.jpg" alt="">
-    <!-- Sidenav -->
+  
+
+    <!-- Sidenav (For Small Screens) -->
     <div id="sidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
         <a href="index.html">HOME</a>
@@ -277,17 +281,12 @@
         <a href="cr.html">CRICKET JERSEY</a>
     </div>
 
- 
-
-<!-- Product Display Section -->
-<div class="max-w-7xl mx-auto px-4 py-4 ">
-    <div id="product-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-        <!-- Products will be dynamically loaded here -->
+    <div class="content max-w-7xl mx-auto px-4 py-4">
+        <!-- Your Page Content Goes Here -->
     </div>
-</div>
 
     <!-- Footer Section -->
-    <footer class="bg-black text-white py-12 border-t-4 border-r-4 border-white">
+    <footer class="bg-black text-white py-12 border-t-4 border-r-4 border-white mt-56">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div>
@@ -319,174 +318,23 @@
             </div>
         </div>
     </footer>
- <script>
-       // Function to dynamically display products
-        function displayProducts(filteredProducts) {
-            const productList = document.getElementById('product-list');
-            productList.innerHTML = ''; // Clear previous products
 
-            filteredProducts.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.classList.add('product-card');
-                productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3 class="text-lg font-semibold">${product.name}</h3>
-                    <p class="text-gray-600 mt-2">${product.description}</p>
-                    <p class="text-xl font-semibold mt-3">₹${product.price}</p>
-                    <a href="https://api.whatsapp.com/send/?phone=916290563943&text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}%20for%20₹${product.price}&type=phone_number&app_absent=0"
-                       class="buy-now-btn inline-block px-6 py-2 bg-white text-black rounded-[10px] border border-black text-base sm:text-lg hover:bg-gray-800 hover:text-white transition-all mt-4 shadow-md whitespace-nowrap">
-                        Buy Now
-                    </a>
-                `;
-                productList.appendChild(productCard);
-            });
-        }
-
-        // Initial product display
-        displayProducts(products);
-
-      function searchProducts() {
-    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-    const filteredProducts = products.filter(product => {
-        // Check if product.name exists and is a string before calling toLowerCase
-        return product.name && typeof product.name === 'string' && product.name.toLowerCase().includes(searchQuery);
-    });
-    displayProducts(filteredProducts);
-}
-
-
- </script>
-    <!-- JavaScript for dynamic functionality -->
     <script>
         document.getElementById('hamburger-icon').addEventListener('click', function() {
-    document.getElementById('sidenav').classList.add('open');
-    document.getElementById('overlay').classList.add('show');
-});
+            document.getElementById('sidenav').classList.add('open');
+            document.getElementById('overlay').classList.add('show');
+        });
 
-document.getElementById('closebtn').addEventListener('click', function() {
-    document.getElementById('sidenav').classList.remove('open');
-    document.getElementById('overlay').classList.remove('show');
-});
+        document.getElementById('closebtn').addEventListener('click', function() {
+            document.getElementById('sidenav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        });
 
-document.getElementById('overlay').addEventListener('click', function() {
-    document.getElementById('sidenav').classList.remove('open');
-    document.getElementById('overlay').classList.remove('show');
-});
-
-        
-
-        // Function to dynamically display products
-        function displayProducts(filteredProducts) {
-            const productList = document.getElementById('product-list');
-            productList.innerHTML = ''; // Clear previous products
-
-            filteredProducts.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.classList.add('product-card');
-                productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3 class="text-lg font-semibold">${product.name}</h3>
-                    <p class="text-gray-600 mt-2">${product.description}</p>
-                    <p class="text-xl font-semibold mt-3">₹${product.price}</p>
-                    <a href="https://api.whatsapp.com/send/?phone=916290563943&text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}%20for%20₹${product.price}&type=phone_number&app_absent=0"
-                       class="buy-now-btn inline-block px-6 py-2 bg-white text-black rounded-[10px] border border-black text-base sm:text-lg hover:bg-gray-800 hover:text-white transition-all mt-4 shadow-md whitespace-nowrap">
-                        Buy Now
-                    </a>
-                `;
-                productList.appendChild(productCard);
-            });
-        }
-
-        // Initial product display
-        displayProducts(products);
-
-      function searchProducts() {
-    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-    const filteredProducts = products.filter(product => {
-        // Check if product.name exists and is a string before calling toLowerCase
-        return product.name && typeof product.name === 'string' && product.name.toLowerCase().includes(searchQuery);
-    });
-    displayProducts(filteredProducts);
-}
-
-
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('sidenav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        });
     </script>
- <!-- Firebase SDK -->
- <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-
-    // Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyCt_2hlmYjIpWsxSMpXNOwmpPzwyNnIiB8",
-        authDomain: "the-times-e4a65.firebaseapp.com",
-        databaseURL: "https://the-times-e4a65-default-rtdb.firebaseio.com",
-        projectId: "the-times-e4a65",
-        storageBucket: "the-times-e4a65.appspot.com",
-        messagingSenderId: "958497728175",
-        appId: "1:958497728175:web:60fcdfdf97564fe083165a",
-        measurementId: "G-BLT9FRR41R"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-    const productsRef = ref(database, 'products/');
-
-    let allProducts = []; // Store all products globally
-
-    // Function to fetch products from Firebase and store them
-    function fetchProducts() {
-        onValue(productsRef, (snapshot) => {
-            allProducts = []; // Reset global product list
-
-            snapshot.forEach(childSnapshot => {
-                const product = childSnapshot.val();
-                allProducts.push(product);
-            });
-
-            // Display all products initially
-            displayProducts(allProducts);
-        });
-    }
-
-    // Function to display products dynamically
-    function displayProducts(products) {
-        const productList = document.getElementById('product-list');
-        productList.innerHTML = ''; // Clear previous products
-
-        products.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card', 'bg-white', 'rounded-lg', 'shadow-md', 'p-4', 'text-center');
-            productCard.innerHTML = `
-                <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover rounded">
-                <h3 class="text-lg font-semibold mt-2">${product.name}</h3>
-                <p class="text-gray-600">${product.description}</p>
-                <p class="text-xl font-semibold mt-3">₹${product.price}</p>
-                <a href="https://api.whatsapp.com/send/?phone=916290563943&text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}%20for%20₹${product.price}&type=phone_number&app_absent=0"
-                   class="inline-block px-6 py-2 bg-white text-black border font-semibold border-black rounded-md mt-3 hover:bg-black transition">
-                    Buy Now
-                </a>
-            `;
-            productList.appendChild(productCard);
-        });
-    }
-
-    // Function to search products dynamically
-    window.searchProducts = function () {
-        const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-        const filteredProducts = allProducts.filter(product =>
-            product.name.toLowerCase().includes(searchQuery)
-        );
-        displayProducts(filteredProducts);
-    };
-
-    // Fetch products on page load
-    window.onload = fetchProducts;
-</script>
-
-
-
 </body>
 
 </html>

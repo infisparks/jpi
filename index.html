@@ -61,29 +61,33 @@
             padding-top: 80px;
         }
 
-        /* Sidenav styles */
-        .sidenav {
+      /* Sidenav styles */
+      .sidenav {
             position: fixed;
             top: 0;
             left: -250px;
             width: 250px;
             height: 100%;
-            background-color: #111;
+            background-color: #ffffff;
             overflow-x: hidden;
             transition: 0.3s;
             padding-top: 60px;
             z-index: 100;
+            border-color: black;
+            /* border: black solid 1px; */
         }
 
         .sidenav a {
             padding: 15px 25px;
             text-decoration: none;
             font-size: 20px;
-            color: white;
+            color: rgb(0, 0, 0);
             display: block;
             transition: 0.3s;
+            border: rgb(65, 64, 64) solid 1px;
+            border-radius: 10px;
+            margin: 10px;
         }
-
         .sidenav a:hover {
             color: #f1f1f1;
             background-color: #575757;
@@ -243,13 +247,13 @@
     <nav class="bottom-navbar">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex justify-between">
-                <a href="#" class="menu-link">HOME</a>
+                <a href="index.html" class="menu-link">HOME</a>
                 <a href="shop.html" class="menu-link">SHOP</a>
-                <a href="#" class="menu-link">24 25 SEASON</a>
-                <a href="#" class="menu-link">EURO JERSEYS</a>
-                <a href="#" class="menu-link">RETRO JERSEYS</a>
-                <a href="#" class="menu-link">SLEEVELESS JERSEYS</a>
-                <a href="#" class="menu-link">CRICKET JERSEY</a>
+                <a href="24.html" class="menu-link">24 25 SEASON</a>
+                <a href="euro.html" class="menu-link">EURO JERSEYS</a>
+                <a href="retro.html" class="menu-link">RETRO JERSEYS</a>
+                <a href="sleve.html" class="menu-link">SLEEVELESS JERSEYS</a>
+                <a href="cr.html" class="menu-link">CRICKET JERSEY</a>
             </div>
         </div>
     </nav>
@@ -260,13 +264,13 @@
     <!-- Sidenav (For Small Screens) -->
     <div id="sidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
-        <a href="#">HOME</a>
+        <a href="index.html">HOME</a>
         <a href="shop.html">SHOP</a>
-        <a href="#">24 25 SEASON</a>
-        <a href="#">EURO JERSEYS</a>
-        <a href="#">RETRO JERSEYS</a>
-        <a href="#">SLEEVELESS JERSEYS</a>
-        <a href="#">CRICKET JERSEY</a>
+        <a href="24.html">24 25 SEASON</a>
+        <a href="euro.html">EURO JERSEYS</a>
+        <a href="retro.html">RETRO JERSEYS</a>
+        <a href="sleve.html">SLEEVELESS JERSEYS</a>
+        <a href="cr.html">CRICKET JERSEY</a>
     </div>
 
     <!-- Overlay to close sidenav when clicked outside -->
@@ -329,7 +333,7 @@
                 </div>
             </div>
             <div class="mt-12 text-center border-t-2 border-white pt-4">
-                <p>&copy; Fanaacs 2024 – All Rights Reserved.</p>
+                <p>&copy; JPI 2024 – All Rights Reserved.</p>
             </div>
         </div>
     </footer>
