@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Premium Football Jerseys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom Styling for Search Bar */
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .search-button {
+            background-color: #333;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #555;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-bar {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Custom styling for the Instagram logo */
+        .instagram-logo {
+            font-size: 2rem;
+            color: #636363;
+        }
+
+        /* Navbar Styling */
+        .navbar-logo {
+            height: 60px;
+            object-fit: contain;
+        }
+
+        /* Border style */
+        .navbar-border {
+            border-top-width: 1px;
+            border-color: #d1d5db;
+        }
+
+        /* Top navbar styling */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: white;
+            z-index: 50;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Bottom navbar styling */
+        .bottom-navbar {
+            width: 100%;
+            background-color: black;
+            box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Menu links styling */
+        .menu-link {
+            padding: 10px 15px;
+            color: white;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .menu-link:hover {
+            border-bottom: 2px solid white;
+        }
+
+        /* Space between content and bottom navbar */
+        .content {
+            padding-top: 80px;
+        }
+
+        /* Sidenav styles */
+        .sidenav {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #ffffff;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+            z-index: 100;
+            border-color: black;
+            /* border: black solid 1px; */
+        }
+
+        .sidenav a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 20px;
+            color: rgb(0, 0, 0);
+            display: block;
+            transition: 0.3s;
+            border: rgb(65, 64, 64) solid 1px;
+            border-radius: 10px;
+            margin: 10px;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+            background-color: #575757;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            color: white;
+        }
+
+        .sidenav.open {
+            left: 0;
+        }
+
+        /* Smooth Transition for Sidenav */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+
+        /* Overlay for outside click to close */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 99;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Hamburger menu for small screens */
+        .hamburger-btn {
+            display: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            .hamburger-btn {
+                display: block;
+                font-size: 30px;
+                color: #333;
+                cursor: pointer;
+            }
+
+            .bottom-navbar {
+                display: none;
+            }
+
+            .sidenav {
+                left: -250px;
+            }
+
+            .sidenav.open {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Navbar -->
+    <nav class="top-navbar navbar-border">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="relative flex items-center justify-between h-16">
+                <!-- Instagram Logo (Left Corner) -->
+                <a href="https://www.instagram.com/jerseysparadise.in/?hl=en" class="absolute left-4">
+                    <i class="fab fa-instagram instagram-logo"></i>
+                </a>
+
+                <!-- Logo in the center -->
+                <div class="flex items-center justify-center flex-1">
+                    <a href="#">
+                        <img src="1.jpg" alt="Logo" class="navbar-logo">
+                    </a>
+                </div>
+
+                <!-- Right Corner Icons -->
+                <div class="flex space-x-6 mr-4">
+                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+                        <i class="fas fa-heart"></i> <!-- Wishlist icon -->
+                    </a>
+                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+                        <i class="fas fa-shopping-cart"></i> <!-- Cart icon -->
+                    </a>
+                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+                        <i class="fas fa-search"></i> <!-- Search icon -->
+                    </a>
+                </div>
+
+                <!-- Hamburger Menu Button for Mobile -->
+                <span class="hamburger-btn" id="hamburger-icon">
+                    <i class="fas fa-bars"></i>
+                </span>
+            </div>
+        </div>
+          <!-- Bottom Navbar (For Large Screens) -->
+    <nav class="bottom-navbar">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="flex justify-between">
+                <a href="index.html" class="menu-link">HOME</a>
+                <a href="shop.html" class="menu-link">SHOP</a>
+                <a href="24.html" class="menu-link">24 25 SEASON</a>
+                <a href="euro.html" class="menu-link">EURO JERSEYS</a>
+                <a href="retro.html" class="menu-link">RETRO JERSEYS</a>
+                <a href="sleve.html" class="menu-link">SLEEVELESS JERSEYS</a>
+                <a href="cr.html" class="menu-link">CRICKET JERSEY</a>
+            </div>
+        </div>
+    </nav>
+    </nav>
+
+  
+    <img class="w-full h-auto " src="4.jpg" alt="">
+    <!-- Sidenav (For Small Screens) -->
+    <div id="sidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
+        <a href="index.html">HOME</a>
+        <a href="shop.html">SHOP</a>
+        <a href="24.html">24 25 SEASON</a>
+        <a href="euro.html">EURO JERSEYS</a>
+        <a href="retro.html">RETRO JERSEYS</a>
+        <a href="sleve.html">SLEEVELESS JERSEYS</a>
+        <a href="cr.html">CRICKET JERSEY</a>
+    </div>
+
+     <!-- Main container -->
+     <div class="min-h-screen flex items-center justify-center py-8">
+        <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl">
+            <!-- Header -->
+            <h1 class="text-3xl font-semibold text-center text-blue-600 mb-6">Admin Dashboard</h1>
+            <p class="text-center text-gray-500 mb-8">Quickly access all the admin pages below.</p>
+
+            <!-- Button Grid (Responsive) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <a href="/admin/euroadmin.html" class="block p-6 bg-blue-600 text-white text-lg font-medium text-center rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">Euro </a>
+                <a href="/admin/24ad.html" class="block p-6 bg-blue-600 text-white text-lg font-medium text-center rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">24/25 season</a>
+                <a href="/admin/sadmin.html" class="block p-6 bg-blue-600 text-white text-lg font-medium text-center rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">Sleves</a>
+                <a href="/admin/cradmin.html" class="block p-6 bg-blue-600 text-white text-lg font-medium text-center rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">Cricket</a>
+                <a href="/admin/admin.html" class="block p-6 bg-blue-600 text-white text-lg font-medium text-center rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">Home</a>
+                <a href="/admin/retroadmin.html" class="block p-6 bg-blue-600 text-white text-lg font-medium text-center rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">Retro</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-black text-white py-12 border-t-4 border-r-4 border-white ">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">INFORMATION</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-gray-400">About Us</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Refund and Returns Policy</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-gray-400">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">CUSTOMER SERVICE</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-gray-400">Track Your Order</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Subscribe to Our Newsletter</h3>
+                    <form id="newsletter-form" class="flex flex-col">
+                        <input type="email" id="email-input" class="p-3 mb-4 border border-white bg-transparent text-white placeholder-white rounded" placeholder="Enter your email here" required>
+                        <button type="submit" class="bg-white text-black p-3 rounded hover:bg-gray-200">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="mt-12 text-center border-t-2 border-white pt-4">
+                <p>&copy; JPI 2024 – All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('hamburger-icon').addEventListener('click', function() {
+            document.getElementById('sidenav').classList.add('open');
+            document.getElementById('overlay').classList.add('show');
+        });
+
+        document.getElementById('closebtn').addEventListener('click', function() {
+            document.getElementById('sidenav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        });
+
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('sidenav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        });
+    </script>
+</body>
+
+</html>

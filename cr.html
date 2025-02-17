@@ -2,339 +2,449 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop - Premium Football Jerseys</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <style>
-        /* Custom Styling for Search Bar */
-        .search-bar {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            background-color: #f1f1f1;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop - Premium Football Jerseys</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <style>
+    /* Custom Styling for Search Bar */
+    .search-bar {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
 
-        .search-button {
-            background-color: #333;
-            color: white;
-            padding: 12px;
-            border-radius: 5px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
+    .search-button {
+      background-color: #333;
+      color: white;
+      padding: 12px;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
 
-        .search-button:hover {
-            background-color: #555;
-        }
+    .search-button:hover {
+      background-color: #555;
+    }
 
-        .product-card img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-        }
+    /* Product Card Styling */
+    .product-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: 0.3s ease;
+    }
 
-        .product-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: 0.3s ease;
-        }
+    .product-card:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
 
-        .product-card:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
+    .product-card img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
 
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+    /* Star Rating Styling */
+    .star {
+      font-size: 20px;
+      color: #ccc;
+      cursor: pointer;
+    }
 
-            .search-bar {
-                padding: 8px;
-            }
-        }
+    .star.selected {
+      color: gold;
+    }
 
-        @media (max-width: 480px) {
-            .product-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
 
-        /* Custom styling for the Instagram logo */
-        .instagram-logo {
-            font-size: 2rem;
-            color: #636363;
-        }
+      .search-bar {
+        padding: 8px;
+      }
+    }
 
-        /* Navbar Styling */
-        .navbar-logo {
-            height: 60px;
-            object-fit: contain;
-        }
+    @media (max-width: 480px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+    }
 
-        /* Border style */
-        .navbar-border {
-            border-top-width: 1px;
-            border-color: #d1d5db;
-        }
+    /* Custom styling for the Instagram logo */
+    .instagram-logo {
+      font-size: 2rem;
+      color: #636363;
+    }
 
-        /* Top navbar styling */
-        .top-navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: white;
-            z-index: 50;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
+    /* Navbar Styling */
+    .navbar-logo {
+      height: 60px;
+      object-fit: contain;
+    }
 
-        /* Bottom navbar styling */
-        .bottom-navbar {
-            width: 100%;
-            background-color: black;
-            box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
-        }
+    /* Border style */
+    .navbar-border {
+      border-top-width: 1px;
+      border-color: #d1d5db;
+    }
 
-        /* Menu links styling */
-        .menu-link {
-            padding: 10px 15px;
-            color: white;
-            display: inline-block;
-            text-align: center;
-            text-decoration: none;
-        }
+    /* Top navbar styling */
+    .top-navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: white;
+      z-index: 50;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-        .menu-link:hover {
-            border-bottom: 2px solid white;
-        }
+    /* Bottom navbar styling */
+    .bottom-navbar {
+      width: 100%;
+      background-color: black;
+      box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-        /* Space between content and bottom navbar */
-        .content {
-            padding-top: 80px;
-        }
+    /* Menu links styling */
+    .menu-link {
+      padding: 10px 15px;
+      color: white;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+    }
 
-        /* Sidenav styles */
-        .sidenav {
-            position: fixed;
-            top: 0;
-            left: -250px;
-            width: 250px;
-            height: 100%;
-            background-color: #ffffff;
-            overflow-x: hidden;
-            transition: 0.3s;
-            padding-top: 60px;
-            z-index: 100;
-            border-color: black;
-            /* border: black solid 1px; */
-        }
+    .menu-link:hover {
+      border-bottom: 2px solid white;
+    }
 
-        .sidenav a {
-            padding: 15px 25px;
-            text-decoration: none;
-            font-size: 20px;
-            color: rgb(0, 0, 0);
-            display: block;
-            transition: 0.3s;
-            border: rgb(65, 64, 64) solid 1px;
-            border-radius: 10px;
-            margin: 10px;
-        }
+    /* Space between content and bottom navbar */
+    .content {
+      padding-top: 80px;
+    }
 
-        .sidenav a:hover {
-            color: #f1f1f1;
-            background-color: #575757;
-        }
+    /* Sidenav styles */
+    .sidenav {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #ffffff;
+      overflow-x: hidden;
+      transition: 0.3s;
+      padding-top: 60px;
+      z-index: 100;
+      border-color: black;
+    }
 
-        .sidenav .closebtn {
-            position: absolute;
-            top: 0;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
-            color: white;
-        }
+    .sidenav a {
+      padding: 15px 25px;
+      text-decoration: none;
+      font-size: 20px;
+      color: rgb(0, 0, 0);
+      display: block;
+      transition: 0.3s;
+      border: rgb(65, 64, 64) solid 1px;
+      border-radius: 10px;
+      margin: 10px;
+    }
 
-        .sidenav.open {
-            left: 0;
-        }
+    .sidenav a:hover {
+      color: #f1f1f1;
+      background-color: #575757;
+    }
 
-        /* Smooth Transition for Sidenav */
-        .transition-all {
-            transition: all 0.3s ease;
-        }
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+      color: white;
+    }
 
-        /* Overlay for outside click to close */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            z-index: 99;
-        }
+    .sidenav.open {
+      left: 0;
+    }
 
-        .overlay.show {
-            display: block;
-        }
+    /* Smooth Transition for Sidenav */
+    .transition-all {
+      transition: all 0.3s ease;
+    }
 
-        /* Hamburger menu for small screens */
-        .hamburger-btn {
-            display: none;
-        }
+    /* Overlay for outside click to close */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 99;
+    }
 
-        @media screen and (max-width: 768px) {
-            .hamburger-btn {
-                display: block;
-                font-size: 30px;
-                color: #333;
-                cursor: pointer;
-            }
+    .overlay.show {
+      display: block;
+    }
 
-            .bottom-navbar {
-                display: none;
-            }
+    /* Hamburger menu for small screens */
+    .hamburger-btn {
+      display: none;
+    }
 
-            .sidenav {
-                left: -250px;
-            }
+    @media screen and (max-width: 768px) {
+      .hamburger-btn {
+        display: block;
+        font-size: 30px;
+        color: #333;
+        cursor: pointer;
+      }
 
-            .sidenav.open {
-                left: 0;
-            }
-        }
-    </style>
+      .bottom-navbar {
+        display: none;
+      }
+
+      .sidenav {
+        left: -250px;
+      }
+
+      .sidenav.open {
+        left: 0;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Top Navbar -->
-    <nav class="top-navbar navbar-border">
-        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div class="relative flex items-center justify-between h-16">
-                <!-- Instagram Logo (Left Corner) -->
-                <a href="https://www.instagram.com/jerseysparadise.in/?hl=en" class="absolute left-4">
-                    <i class="fab fa-instagram instagram-logo"></i>
-                </a>
+  <!-- Top Navbar -->
+  <nav class="top-navbar navbar-border">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+      <div class="relative flex items-center justify-between h-16">
+        <!-- Instagram Logo (Left Corner) -->
+        <a href="https://www.instagram.com/jerseysparadise.in/?hl=en" class="absolute left-4">
+          <i class="fab fa-instagram instagram-logo"></i>
+        </a>
 
-                <!-- Logo in the center -->
-                <div class="flex items-center justify-center flex-1">
-                    <a href="#">
-                        <img src="1.jpg" alt="Logo" class="navbar-logo">
-                    </a>
-                </div>
-
-                <!-- Right Corner Icons -->
-                <div class="flex space-x-6 mr-4">
-                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
-                        <i class="fas fa-heart"></i> <!-- Wishlist icon -->
-                    </a>
-                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
-                        <i class="fas fa-shopping-cart"></i> <!-- Cart icon -->
-                    </a>
-                    <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
-                        <i class="fas fa-search"></i> <!-- Search icon -->
-                    </a>
-                </div>
-
-                <!-- Hamburger Menu Button for Mobile -->
-                <span class="hamburger-btn" id="hamburger-icon">
-                    <i class="fas fa-bars"></i>
-                </span>
-            </div>
+        <!-- Logo in the center -->
+        <div class="flex items-center justify-center flex-1">
+          <a href="#">
+            <img src="1.jpg" alt="Logo" class="navbar-logo" />
+          </a>
         </div>
-          <!-- Bottom Navbar (For Large Screens) -->
+
+        <!-- Right Corner Icons -->
+        <div class="flex space-x-6 mr-4">
+          <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+            <i class="fas fa-heart"></i>
+          </a>
+          <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+            <i class="fas fa-shopping-cart"></i>
+          </a>
+          <a href="#" class="text-gray-600 text-xl hover:text-gray-900">
+            <i class="fas fa-search"></i>
+          </a>
+        </div>
+
+        <!-- Hamburger Menu Button for Mobile -->
+        <span class="hamburger-btn" id="hamburger-icon">
+          <i class="fas fa-bars"></i>
+        </span>
+      </div>
+    </div>
+    <!-- Bottom Navbar (For Large Screens) -->
     <nav class="bottom-navbar">
-        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div class="flex justify-between">
-                <a href="index.html" class="menu-link">HOME</a>
-                <a href="shop.html" class="menu-link">SHOP</a>
-                <a href="24.html" class="menu-link">24 25 SEASON</a>
-                <a href="euro.html" class="menu-link">EURO JERSEYS</a>
-                <a href="retro.html" class="menu-link">RETRO JERSEYS</a>
-                <a href="sleve.html" class="menu-link">SLEEVELESS JERSEYS</a>
-                <a href="cr.html" class="menu-link">CRICKET JERSEY</a>
-            </div>
+      <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div class="flex justify-between">
+          <a href="index.html" class="menu-link">HOME</a>
+          <a href="shop.html" class="menu-link">SHOP</a>
+          <a href="24.html" class="menu-link">24 25 SEASON</a>
+          <a href="euro.html" class="menu-link">EURO JERSEYS</a>
+          <a href="retro.html" class="menu-link">RETRO JERSEYS</a>
+          <a href="sleve.html" class="menu-link">SLEEVELESS JERSEYS</a>
+          <a href="cr.html" class="menu-link">CRICKET JERSEY</a>
         </div>
+      </div>
     </nav>
-    </nav>
+  </nav>
+  <img class="w-full h-auto " src="4.jpg" alt="">
+  <!-- Sidenav (For Small Screens) -->
+  <div id="sidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
+    <a href="index.html">HOME</a>
+    <a href="shop.html">SHOP</a>
+    <a href="24.html">24 25 SEASON</a>
+    <a href="euro.html">EURO JERSEYS</a>
+    <a href="retro.html">RETRO JERSEYS</a>
+    <a href="sleve.html">SLEEVELESS JERSEYS</a>
+    <a href="cr.html">CRICKET JERSEY</a>
+  </div>
+  <!-- Overlay for Sidenav -->
+  <div id="overlay" class="overlay"></div>
 
-  
-
-    <!-- Sidenav (For Small Screens) -->
-    <div id="sidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
-        <a href="index.html">HOME</a>
-        <a href="shop.html">SHOP</a>
-        <a href="24.html">24 25 SEASON</a>
-        <a href="euro.html">EURO JERSEYS</a>
-        <a href="retro.html">RETRO JERSEYS</a>
-        <a href="sleve.html">SLEEVELESS JERSEYS</a>
-        <a href="cr.html">CRICKET JERSEY</a>
+  <div class="content max-w-7xl mx-auto px-4 py-4">
+    <!-- Products Grid -->
+    <div id="productContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+      <!-- Product cards will be injected here from Firebase -->
     </div>
+  </div>
 
-    <div class="content max-w-7xl mx-auto px-4 py-4">
-        <!-- Your Page Content Goes Here -->
-    </div>
-
-    <!-- Footer Section -->
-    <footer class="bg-black text-white py-12 border-t-4 border-r-4 border-white mt-56">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <div>
-                    <h3 class="text-xl font-semibold mb-6">INFORMATION</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#" class="hover:text-gray-400">About Us</a></li>
-                        <li><a href="#" class="hover:text-gray-400">Refund and Returns Policy</a></li>
-                        <li><a href="#" class="hover:text-gray-400">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-gray-400">FAQ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold mb-6">CUSTOMER SERVICE</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#" class="hover:text-gray-400">Track Your Order</a></li>
-                        <li><a href="#" class="hover:text-gray-400">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold mb-6">Subscribe to Our Newsletter</h3>
-                    <form id="newsletter-form" class="flex flex-col">
-                        <input type="email" id="email-input" class="p-3 mb-4 border border-white bg-transparent text-white placeholder-white rounded" placeholder="Enter your email here" required>
-                        <button type="submit" class="bg-white text-black p-3 rounded hover:bg-gray-200">Subscribe</button>
-                    </form>
-                </div>
-            </div>
-            <div class="mt-12 text-center border-t-2 border-white pt-4">
-                <p>&copy; JPI 2024 – All Rights Reserved.</p>
-            </div>
+  <!-- Footer Section -->
+  <footer class="bg-black text-white py-12 border-t-4 border-r-4 border-white ">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div>
+          <h3 class="text-xl font-semibold mb-6">INFORMATION</h3>
+          <ul class="space-y-4">
+            <li><a href="#" class="hover:text-gray-400">About Us</a></li>
+            <li><a href="#" class="hover:text-gray-400">Refund and Returns Policy</a></li>
+            <li><a href="#" class="hover:text-gray-400">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-gray-400">FAQ</a></li>
+          </ul>
         </div>
-    </footer>
+        <div>
+          <h3 class="text-xl font-semibold mb-6">CUSTOMER SERVICE</h3>
+          <ul class="space-y-4">
+            <li><a href="#" class="hover:text-gray-400">Track Your Order</a></li>
+            <li><a href="#" class="hover:text-gray-400">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-6">Subscribe to Our Newsletter</h3>
+          <form id="newsletter-form" class="flex flex-col">
+            <input type="email" id="email-input" class="p-3 mb-4 border border-white bg-transparent text-white placeholder-white rounded"
+              placeholder="Enter your email here" required>
+            <button type="submit" class="bg-white text-black p-3 rounded hover:bg-gray-200">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <div class="mt-12 text-center border-t-2 border-white pt-4">
+        <p>&copy; JPI 2024 – All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
 
-    <script>
-        document.getElementById('hamburger-icon').addEventListener('click', function() {
-            document.getElementById('sidenav').classList.add('open');
-            document.getElementById('overlay').classList.add('show');
-        });
+  <!-- Main Scripts -->
+  <script>
+    // Hamburger menu functionality
+    document.getElementById('hamburger-icon').addEventListener('click', function () {
+      document.getElementById('sidenav').classList.add('open');
+      document.getElementById('overlay').classList.add('show');
+    });
 
-        document.getElementById('closebtn').addEventListener('click', function() {
-            document.getElementById('sidenav').classList.remove('open');
-            document.getElementById('overlay').classList.remove('show');
-        });
+    document.getElementById('closebtn').addEventListener('click', function () {
+      document.getElementById('sidenav').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+    });
 
-        document.getElementById('overlay').addEventListener('click', function() {
-            document.getElementById('sidenav').classList.remove('open');
-            document.getElementById('overlay').classList.remove('show');
+    document.getElementById('overlay').addEventListener('click', function () {
+      document.getElementById('sidenav').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+    });
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCt_2hlmYjIpWsxSMpXNOwmpPzwyNnIiB8",
+      authDomain: "the-times-e4a65.firebaseapp.com",
+      databaseURL: "https://the-times-e4a65-default-rtdb.firebaseio.com",
+      projectId: "the-times-e4a65",
+      storageBucket: "the-times-e4a65.appspot.com",
+      messagingSenderId: "958497728175",
+      appId: "1:958497728175:web:60fcdfdf97564fe083165a",
+      measurementId: "G-BLT9FRR41R"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+    const database = firebase.database();
+
+    const productContainer = document.getElementById('productContainer');
+
+    // Fetch products from Firebase and display them
+    firebase.database().ref('cr_products').on('value', snapshot => {
+      productContainer.innerHTML = ""; // Clear previous content
+      const products = snapshot.val();
+      for (let id in products) {
+        const product = products[id];
+
+        // Create a card element
+        const card = document.createElement('div');
+        card.className = "product-card";
+
+        card.innerHTML = `
+          <img src="${product.img}" alt="${product.name}" />
+          <h2 class="text-xl font-semibold mt-4">${product.name}</h2>
+          <p class="mt-2">${product.description}</p>
+          <p class="mt-2 font-bold">Price: $${product.price}</p>
+          <div data-id="${id}" class="rating mt-4">
+            ${createStarsHTML(product.rating, product.ratingCount)}
+          </div>
+          <a href="https://api.whatsapp.com/send/?phone=916290563943&text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}%20for%20₹${product.price}&type=phone_number&app_absent=0"
+                   class="inline-block px-6 py-2 bg-white text-black border font-semibold border-black rounded-md mt-3 hover:bg-black transition">
+                    Buy Now
+                </a>
+        `;
+
+        productContainer.appendChild(card);
+      }
+      // Attach click events to stars after rendering
+      attachStarEvents();
+    });
+
+    // Create star rating HTML based on current rating values
+    function createStarsHTML(totalRating, ratingCount) {
+      let starsHTML = "";
+      const avgRating = ratingCount > 0 ? Math.round(totalRating / ratingCount) : 0;
+      for (let i = 1; i <= 5; i++) {
+        starsHTML += `<span class="star ${i <= avgRating ? 'selected' : ''}" data-star="${i}">&#9733;</span>`;
+      }
+      return starsHTML;
+    }
+
+    // Attach click events for each star to allow rating
+    function attachStarEvents() {
+      const starElements = document.querySelectorAll('.star');
+      starElements.forEach(star => {
+        star.addEventListener('click', function () {
+          const ratingDiv = this.parentElement;
+          const productId = ratingDiv.getAttribute('data-id');
+          const starValue = parseInt(this.getAttribute('data-star'));
+
+          // Update the product's rating in Firebase:
+          // Increase the total rating sum and rating count.
+          const productRef = firebase.database().ref('products/' + productId);
+          productRef.once('value').then(snapshot => {
+            const product = snapshot.val();
+            const newTotalRating = product.rating + starValue;
+            const newRatingCount = product.ratingCount + 1;
+            return productRef.update({
+              rating: newTotalRating,
+              ratingCount: newRatingCount
+            });
+          }).then(() => {
+            alert('Thanks for rating!');
+          }).catch(error => {
+            console.error("Error updating rating:", error);
+          });
         });
-    </script>
+      });
+    }
+  </script>
 </body>
 
 </html>
