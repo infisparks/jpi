@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wishlist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="content max-w-7xl mx-auto px-4 py-4">
+        <h1 class="text-3xl font-bold mb-4">Your Wishlist</h1>
+        <div id="wishlistContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <!-- Wishlist items will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        // Fetch wishlist from localStorage and display the products
+        const wishlistContainer = document.getElementById('wishlistContainer');
+        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+        // If there are no items in wishlist
+        if (wishlist.length === 0) {
+            wishlistContainer.innerHTML = '<p>No products in wishlist.</p>';
+        }
+
+        // Display each product in the wishlist
+        wishlist.forEach(product => {
+            const card = document.createElement('div');
+            card.className = "product-card";
+
+            card.innerHTML = `
+                <img src="${product.img}" alt="${product.name}" />
+                <h2 class="text-xl font-semibold mt-4">${product.name}</h2>
+                <p class="mt-2">${product.description}</p>
+                <p class="mt-2 font-bold">Price: $${product.price}</p>
+                <a href="https://api.whatsapp.com/send/?phone=916290563943&text=I%20want%20to%20buy%20${encodeURIComponent(product.name)}%20for%20₹${product.price}&type=phone_number&app_absent=0"
+                   class="inline-block px-6 py-2 bg-white text-black border font-semibold border-black rounded-md mt-3 hover:bg-black transition">
+                    Buy Now
+                </a>
+            `;
+
+            wishlistContainer.appendChild(card);
+        });
+    </script>
+</body>
+</html>
